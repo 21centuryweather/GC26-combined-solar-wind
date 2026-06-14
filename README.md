@@ -1,12 +1,15 @@
-# Project title
+# Combined Solar and Wind Lulls
 
-**Research area:**
+**Research area:** 
+Energy supply
 
-**Research questios:**
+**Research questions:**
+* What is the coincidence of years with significant winter-time solar and wind lulls?
+* What are the features of combined wind and solar lull events?
+* How do these relate to weather regimes?
 
 **Project Leads**
-* name, affiliation/github username
-* 
+* Carl Doedens, UniMelb, github: cdoedens
 
 **Project members:**
 * name, affiliation/github username
