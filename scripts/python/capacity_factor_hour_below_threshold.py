@@ -19,7 +19,7 @@ cf_threshold = sys.argv[2]/100.
 # Define paths to raw solar and wind capacity factor data
 folder_solar = Path("/home/563/fm6730/localrepo/GC26-combined-solar-wind/data/raw/solar_cf/")
 folder_wind  = Path("/home/563/fm6730/localrepo/GC26-combined-solar-wind/data/raw/wind_cf/")
-folder_out   = Path("/home/563/fm6730/localrepo/GC26-combined-solar-wind/processed/")
+folder_out   = Path("/home/563/fm6730/localrepo/GC26-combined-solar-wind/data/processed/")
 
 # Construct file paths for the given year
 file_solar = f'{folder_solar}/solar_capacity_factor_van_der_Wiel_era5_hourly_{year}_Aus.nc'

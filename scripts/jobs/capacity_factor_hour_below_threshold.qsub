@@ -7,7 +7,7 @@
 #PBS -l storage=scratch/nf33+gdata/w42+gdata/nf33+gdata/xp65
 #PBS -q normal 
 #PBS -P nf33
-#PBS -o /home/563/fm6730/localrepo/GC26-combined-solar-wind/data/temp/solar-weatherfeatures/solar-weather-features_2020.oe 
+#PBS -o /home/563/fm6730/localrepo/capacity_factor_below_th.oe 
 #PBS -j oe 
 
 
