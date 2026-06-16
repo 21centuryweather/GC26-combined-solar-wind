@@ -1,8 +1,8 @@
 #!/bin/bash 
 
-#PBS -l walltime=00:40:00 
-#PBS -l mem=30GB 
-#PBS -l ncpus=10
+#PBS -l walltime=01:00:00 
+#PBS -l mem=40GB 
+#PBS -l ncpus=15
 #PBS -l jobfs=10GB 
 #PBS -l storage=scratch/nf33+gdata/w42+gdata/nf33+gdata/xp65
 #PBS -q normal 

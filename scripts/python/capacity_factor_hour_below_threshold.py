@@ -12,9 +12,9 @@ from pathlib import Path
 # This script calculates the number of capacity factors lower than a certain threshold (given in sys.argv[2]).
 
 # Get the year from the command-line argument
-year = sys.argv[1]
-cf_threshold = float(sys.argv[2])/100.
+year = sys.arxgv[1]
 # year = 2000
+cf_threshold = float(sys.argv[2])/100.
 
 # Define paths to raw solar and wind capacity factor data
 folder_solar = Path("/home/563/fm6730/localrepo/GC26-combined-solar-wind/data/raw/solar_cf/")
