@@ -13,13 +13,13 @@ from pathlib import Path
 
 # Get the year from the command-line argument
 year = sys.argv[1]
-cf_threshold = sys.argv[2]/100.
+cf_threshold = float(sys.argv[2])/100.
 # year = 2000
 
 # Define paths to raw solar and wind capacity factor data
 folder_solar = Path("/home/563/fm6730/localrepo/GC26-combined-solar-wind/data/raw/solar_cf/")
 folder_wind  = Path("/home/563/fm6730/localrepo/GC26-combined-solar-wind/data/raw/wind_cf/")
-folder_out   = Path("/home/563/fm6730/localrepo/GC26-combined-solar-wind/data/processed/")
+folder_out   = Path("/home/563/fm6730/localrepo/GC26-combined-solar-wind/data/processed/hour_capacity_factor_lower_than")
 
 # Construct file paths for the given year
 file_solar = f'{folder_solar}/solar_capacity_factor_van_der_Wiel_era5_hourly_{year}_Aus.nc'
@@ -46,7 +46,14 @@ da_combined = xr.where(da_combined == 0, 1, 0)
 # Count the total number of combined lull hours at each grid point
 da_sum_combined = da_combined.sum(dim='time')
 
-# Output of the da_sum_combined
-da_sum_combined = da_combined.sum(dim='time')
+# Add coordinates
+da_sum_combined_wcoords = da_sum_combined.expand_dims(year=[int(year)]).assign_coords(year=[int(year)])
 
-da_sum_combined.to_nc(f"{folder_out}/hour_capacity_factor_lower_than_{cf_threshold}pc_{year}.nc")
+#Outputting
+
+ds_out = xr.Dataset({
+    'count_hour': da_sum_combined_wcoords,
+    'percentage': da_sum_combined_wcoords/len(da_combined.time)*100.
+    })
+    
+ds_out.to_netcdf(f"{folder_out}/hour_capacity_factor_lower_than_{sys.argv[2]}pc_{year}.nc")
