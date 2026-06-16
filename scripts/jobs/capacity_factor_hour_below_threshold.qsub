@@ -1,0 +1,29 @@
+#!/bin/bash 
+
+#PBS -l walltime=00:30:00 
+#PBS -l mem=30GB 
+#PBS -l ncpus=4 
+#PBS -l jobfs=10GB 
+#PBS -l storage=scratch/nf33+gdata/w42+gdata/nf33+gdata/xp65
+#PBS -q normal 
+#PBS -P nf33
+#PBS -o /home/563/fm6730/localrepo/GC26-combined-solar-wind/data/temp/solar-weatherfeatures/solar-weather-features_2020.oe 
+#PBS -j oe 
+
+
+module use /g/data/xp65/public/modules
+module load conda/analysis3 
+module load parallel
+
+INPUTS=/home/563/fm6730/localrepo/GC26-combined-solar-wind/scripts/jobs/input_year.txt
+
+SCRIPT=/home/563/fm6730/localrepo/GC26-combined-solar-wind/scripts/python/capacity_factor_hour_below_threshold.py
+
+cf_threshold=10 #in percent
+
+# Debug: print first few lines of input file
+echo "Input file contents:"
+head -n 3 ${INPUTS}
+
+# Run parallel with explicit argument passing
+parallel --verbose --colsep ' ' -j ${PBS_NCPUS} python3 ${SCRIPT} {1} ${cf_threshold} :::: ${INPUTS}
