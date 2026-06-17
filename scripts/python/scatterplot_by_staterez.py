@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
+import seaborn as sns
 
 # setup dask client
 client = Client()
@@ -81,3 +82,48 @@ g = ds_plot.plot.scatter(
     add_legend=False,
     add_colorbar=False
 )
+
+# plot kernel density plots by state
+df = (
+    ds_plot[["solar_cf", "wind_cf"]]
+    .to_dataframe()
+    .reset_index()
+    .dropna(subset=["solar_cf", "wind_cf", "state_mask"])
+)
+
+states = ["TAS", "SA", "VIC", "NSW", "QLD"]
+
+fig, axs = plt.subplots(
+    nrows=2,
+    ncols=3,
+    figsize=(12, 8),
+    sharex=True,
+    sharey=True
+)
+
+ticks = np.arange(0, 1.01, 0.2)
+
+for ax, state in zip(axs.flat, states):
+    df_state = df[df["state_mask"] == state]
+
+    sns.kdeplot(
+        data=df_state,
+        x="solar_cf",
+        y="wind_cf",
+        ax=ax,
+        fill=True,
+        levels=10,
+        thresh=0.01
+    )
+
+    ax.set_title(state)
+    
+    ax.set_xlabel("Solar capacity factor")
+    ax.set_ylabel("Wind capacity factor")
+
+# remove unused sixth subplot
+for ax in axs.flat[len(states):]:
+    ax.remove()
+
+plt.tight_layout()
+plt.show()
