@@ -1,0 +1,5 @@
+Capacity factors of wind and solar from ERA5:
+/g/data/w42/dr6273/work/projects/Aus_energy/production_metrics/{solar/wind}/capacity_factor/van_der_Wiel/
+
+Solar PV generation for Renewable Energy Zones and capital cities:
+/g/data/gb02/cd3022/solar-pv/{GCCSA/REZ}

@@ -1,13 +1,13 @@
 #!/bin/bash 
 
 #PBS -l walltime=01:00:00 
-#PBS -l mem=40GB 
+#PBS -l mem=100GB 
 #PBS -l ncpus=15
-#PBS -l jobfs=10GB 
+#PBS -l jobfs=100GB 
 #PBS -l storage=scratch/nf33+gdata/w42+gdata/nf33+gdata/xp65
 #PBS -q normal 
 #PBS -P nf33
-#PBS -o /home/563/fm6730/localrepo/`capacity_factor_below_th.oe 
+#PBS -o /home/563/fm6730/localrepo/compute_duration_freq.oe 
 #PBS -j oe 
 
 
@@ -17,7 +17,7 @@ module load parallel
 
 INPUTS=/home/563/fm6730/localrepo/GC26-combined-solar-wind/scripts/jobs/input_year.txt
 
-SCRIPT=/home/563/fm6730/localrepo/GC26-combined-solar-wind/scripts/python/capacity_factor_hour_below_threshold_daytime.py
+SCRIPT=/home/563/fm6730/localrepo/GC26-combined-solar-wind/scripts/python/compute_duration_frequency_ce_main.py
 
 cf_threshold=10 #in percent
 
