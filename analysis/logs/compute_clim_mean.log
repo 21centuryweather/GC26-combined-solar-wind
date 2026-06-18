@@ -1,0 +1,17 @@
+... merging computing for $p
+... merging computing for $p
+... merging computing for $p
+... merging computing for $p
+... merging computing for $p
+
+======================================================================================
+                  Resource Usage on 2026-06-17 13:33:58:
+   Job Id:             171428041.gadi-pbs
+   Project:            nf33
+   Exit Status:        0
+   Service Units:      0.01
+   NCPUs Requested:    1                   CPU Time Used: 00:00:03        
+   Memory Requested:   4.0GB                 Memory Used: 464.93MB        
+   Walltime Requested: 01:00:00            Walltime Used: 00:00:11        
+   JobFS Requested:    1.0GB                  JobFS Used: 0B              
+======================================================================================
