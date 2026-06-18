@@ -46,13 +46,13 @@ def analyze_grid_cell_with_time(condition_array, intensity_array):
 
 threshold = 0.1
 
-solar_cf = f"../data/raw/solar_cf"
-wind_cf = f"../data/raw/wind_cf"
-output_path = f"../data/temp/bikash/s01"
+solar_cf = f"/home/585/bd6544/GC26-combined-solar-wind/data/raw/solar_cf"
+wind_cf = f"/home/585/bd6544/GC26-combined-solar-wind/data/raw/wind_cf"
+output_path = f"/home/585/bd6544/GC26-combined-solar-wind/data/temp/bikash/s01"
 os.makedirs(output_path, exist_ok=True)
 
-solar_flist = sorted([os.path.join(solar_cf, f) for f in os.listdir(solar_cf) if f.endswith(".nc")])
-wind_flist = sorted([os.path.join(wind_cf, f) for f in os.listdir(wind_cf) if f.endswith(".nc")])
+solar_flist = sorted([os.path.join(solar_cf, f) for f in os.listdir(solar_cf) if f.endswith(".nc")])[39:81] ## 39:81
+wind_flist = sorted([os.path.join(wind_cf, f) for f in os.listdir(wind_cf) if f.endswith(".nc")])[39:81]
 
 seasons_dict = {
     "Annual": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
@@ -64,6 +64,8 @@ seasons_dict = {
 
 for solar_file, wind_file in zip(solar_flist, wind_flist):
     print(f"... processing {solar_file}")
+    print(f"... processing {wind_file}")
+    
     ds_solar_year = xr.open_dataset(solar_file)
     ds_wind_year = xr.open_dataset(wind_file)
 
@@ -101,19 +103,35 @@ for solar_file, wind_file in zip(solar_flist, wind_flist):
 
         first_date_season = pd.Timestamp(compound_lull_season["time"].values[0]).strftime("%Y-%m-%d %H:%M:%S")
         base_time_str = f"days since {first_date_season}"
-
+        
+        current_season_date = pd.Timestamp(compound_lull_season["time"].values[0])
+        
         ds_output = xr.Dataset(
-            data_vars={
-                "frequency": metrics.sel(metric="frequency").drop_vars("metric"),
-                "mean_duration": metrics.sel(metric="mean_dur").drop_vars("metric"),
-                "max_duration": metrics.sel(metric="max_dur").drop_vars("metric"),
-                "max_event_start": metrics.sel(metric="start_idx").drop_vars("metric"),
-                "max_event_end": metrics.sel(metric="end_idx").drop_vars("metric"),
-                "mean_intensity": metrics.sel(metric="mean_intensity").drop_vars("metric"),
+                data_vars={
+                "frequency": metrics.sel(metric="frequency").drop_vars("metric").expand_dims(time=[current_season_date]),
+                "mean_duration": metrics.sel(metric="mean_dur").drop_vars("metric").expand_dims(time=[current_season_date]),
+                "max_duration": metrics.sel(metric="max_dur").drop_vars("metric").expand_dims(time=[current_season_date]),
+                "max_event_start": metrics.sel(metric="start_idx").drop_vars("metric").expand_dims(time=[current_season_date]),
+                "max_event_end": metrics.sel(metric="end_idx").drop_vars("metric").expand_dims(time=[current_season_date]),
+                "mean_intensity": metrics.sel(metric="mean_intensity").drop_vars("metric").expand_dims(time=[current_season_date]),
             },
-            coords={"lat": ds_solar_year["lat"], "lon": ds_solar_year["lon"]}
+                coords={
+       #         "time": (["time"], pd.to_datetime([first_date_season])),
+                "lat": ds_solar_year["lat"],
+                "lon": ds_solar_year["lon"]
+                }
         )
 
+        ds_output = ds_output.transpose("time", "lat", "lon")
+
+        ds_output["time"].attrs = {}
+        ds_output["time"].encoding = {
+                "units": "days since 1979-01-01 00:00:00",
+                "calendar": "standard",
+                "dtype": "float64"
+        }
+
+        
         ds_output["frequency"].attrs = {"units": "events", "description": f"Count of compound lull events in {season_name} {year}"}
         ds_output["mean_duration"].attrs = {"units": "days", "description": f"Mean duration of compound lull events in {season_name} {year}"}
         ds_output["max_duration"].attrs = {"units": "days", "description": f"Maximum duration of compound lull events in {season_name} {year}"}
@@ -137,4 +155,3 @@ for solar_file, wind_file in zip(solar_flist, wind_flist):
 
     ds_solar_year.close()
     ds_wind_year.close()
-    

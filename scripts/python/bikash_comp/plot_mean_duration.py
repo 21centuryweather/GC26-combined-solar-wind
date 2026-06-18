@@ -34,7 +34,7 @@ for s in seasons:
     file_path = os.path.join(data_dir, f"{METRIC}_compound_droughts_{s}.nc")
     if os.path.exists(file_path):
         ds = xr.open_dataset(file_path, decode_times=False)
-        data_slice = ds[METRIC]
+        data_slice = ds[METRIC].isel(time=0)
         seasonal_datasets[s] = data_slice
         
 if seasonal_datasets:
@@ -70,7 +70,7 @@ if seasonal_datasets:
 annual_file = os.path.join(data_dir, f"{METRIC}_compound_droughts_Annual.nc")
 if os.path.exists(annual_file):
     ds_annual = xr.open_dataset(annual_file, decode_times=False)
-    annual_data = ds_annual[METRIC]
+    annual_data = ds_annual[METRIC].isel(time=0)
     
     fig_ann, ax_ann = plt.subplots(
         figsize=(8, 7), 

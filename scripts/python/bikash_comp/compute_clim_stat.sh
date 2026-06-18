@@ -20,7 +20,7 @@ OUTPUT_DIR="/home/585/bd6544/GC26-combined-solar-wind/data/temp/bikash/s02"
 mkdir -p "${OUTPUT_DIR}"
 
 for p in Annual DJF MAM JJA SON; do
-    echo '... merging computing for $p'
+    echo '... merging computing for ${p}'
     flist=""
     for y in {1979..2020}; do
         file="${INPUT_DIR}/compound_droughts_${p}_${y}.nc"
